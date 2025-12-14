@@ -1,0 +1,83 @@
+ CREATE TABLE Donor (
+ donor_id INT PRIMARY KEY,
+ name VARCHAR(50),
+ age INT,
+ gender VARCHAR(10),
+ blood_group VARCHAR(5),
+ contact_no VARCHAR(15),
+ last_donation DATE
+ );
+
+ CREATE TABLE Blood_Stock (
+ stock_id INT PRIMARY KEY,
+ blood_group VARCHAR(5),
+ units_available INT,
+ expiry_date DATE
+ );
+
+ CREATE TABLE Receiver (
+ receiver_id INT PRIMARY KEY,
+ name VARCHAR(50),
+ blood_group VARCHAR(5),
+ units_required INT,
+ hospital_name VARCHAR(50),
+ request_date DATE
+ );
+
+ INSERT INTO Donor VALUES
+ (1, 'Rahul', 25, 'Male', 'A+', '9876543210', '2025-01-10'),
+ (2, 'Anita', 28, 'Female', 'B+', '8765432109', '2025-02-15'),
+ (3, 'Vikram', 32, 'Male', 'O+', '9988776655', '2025-01-28'),
+ (4, 'Sonia', 30, 'Female', 'AB+', '8899776655', '2025-03-02');
+
+INSERT INTO Blood_Stock VALUES
+ (101, 'A+', 10, '2025-05-20'),
+ (102, 'B+', 7, '2025-05-18'),
+ (103, 'O+', 15, '2025-04-21'),
+ (104, 'AB+', 5, '2025-04-25');
+
+ INSERT INTO Receiver VALUES
+ (201, 'Kiran', 'A+', 2, 'City Hospital', '2025-03-01'),
+ (202, 'Ravi', 'O+', 3, 'Metro Hospital', '2025-03-02'),
+ (203, 'Sneha', 'B+', 1, 'General Hospital', '2025-03-04');
+
+ SELECT * FROM Donor;
+ SELECT * FROM Blood_Stock;
+ SELECT * FROM Receiver;
+
+ SELECT * FROM Donor
+ WHERE blood_group = 'A+';
+
+SELECT blood_group, units_available 
+FROM Blood_Stock;
+
+ UPDATE Blood_Stock
+ SET units_available = units_available + 1
+ WHERE blood_group = 'A+';
+
+ SELECT d.donor_id,
+ d.name AS donor_name,
+ d.blood_group,
+ b.units_available,
+ b.expiry_date
+ FROM Donor d
+ JOIN Blood_Stock b
+ ON d.blood_group = b.blood_group;
+
+ SELECT r.receiver_id,
+ r.name AS receiver_name,
+ r.blood_group,
+ r.units_required,
+ b.units_available
+ FROM Receiver r
+ JOIN Blood_Stock b
+ ON r.blood_group = b.blood_group;
+
+SELECT r.name AS receiver_name,
+ r.blood_group,
+ r.units_required,
+ b.units_available
+ FROM Receiver r
+ JOIN Blood_Stock b
+ ON r.blood_group = b.blood_group
+ WHERE b.units_available >= r.units_required;
